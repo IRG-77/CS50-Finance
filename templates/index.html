@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}Portfolio{% endblock %}
+
+{% block content %}
+<h1>Portfolio</h1>
+
+<div class="form-group">
+    <h2>Cash Balance</h2>
+    <p><strong>${{ "%.2f"|format(cash) }}</strong></p>
+</div>
+
+<div class="form-group">
+    <h2>Stocks</h2>
+    {% if stocks %}
+    <table>
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.symbol }}</td>
+                <td>{{ stock.shares }}</td>
+                <td>${{ "%.2f"|format(stock.price) }}</td>
+                <td>${{ "%.2f"|format(stock.shares * stock.price) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No stocks owned.</p>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    <h2>Total Portfolio Value</h2>
+    <p><strong>${{ "%.2f"|format(total_value) }}</strong></p>
+</div>
+{% endblock %}
+
