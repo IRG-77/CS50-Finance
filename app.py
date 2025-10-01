@@ -85,14 +85,18 @@ def buy():
         
         if not symbol:
             return apology("must provide symbol")
-        if not shares or not shares.isdigit() or int(shares) <= 0:
-            return apology("must provide positive number of shares")
+        if not shares:
+            return apology("must provide number of shares")
+        try:
+            shares = int(shares)
+            if shares <= 0:
+                return apology("must provide positive number of shares")
+        except ValueError:
+            return apology("must provide valid number of shares")
         
         quote = lookup(symbol)
         if not quote:
             return apology("invalid symbol")
-        
-        shares = int(shares)
         cost = shares * quote["price"]
         
         db = get_db_connection()
@@ -266,10 +270,14 @@ def sell():
         
         if not symbol:
             return apology("must provide symbol")
-        if not shares or not shares.isdigit() or int(shares) <= 0:
-            return apology("must provide positive number of shares")
-        
-        shares = int(shares)
+        if not shares:
+            return apology("must provide number of shares")
+        try:
+            shares = int(shares)
+            if shares <= 0:
+                return apology("must provide positive number of shares")
+        except ValueError:
+            return apology("must provide valid number of shares")
         
         db = get_db_connection()
         try:

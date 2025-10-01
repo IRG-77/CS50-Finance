@@ -11,7 +11,7 @@
         <select id="symbol" name="symbol" required>
             <option value="">Select a stock to sell</option>
             {% for stock in stocks %}
-            <option value="{{ stock.symbol }}">{{ stock.symbol }} ({{ stock.shares }} shares)</option>
+            <option value="{{ stock.symbol }}">{{ stock.symbol }} ({{ stock.total_shares }} shares)</option>
             {% endfor %}
         </select>
     </div>
@@ -23,14 +23,5 @@
     
     <button type="submit">Sell</button>
 </form>
-
-{% if quote %}
-<div class="form-group">
-    <h2>Quote for {{ quote.symbol }}</h2>
-    <p><strong>Price:</strong> ${{ "%.2f"|format(quote.price) }}</p>
-    <p><strong>Name:</strong> {{ quote.name }}</p>
-    <p><strong>Total Value:</strong> ${{ "%.2f"|format(quote.price * shares) }}</p>
-</div>
-{% endif %}
 {% endblock %}
 
