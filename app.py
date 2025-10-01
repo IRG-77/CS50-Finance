@@ -80,11 +80,12 @@ def index():
 def buy():
     """Buy shares of stock"""
     if request.method == "POST":
-        symbol = request.form.get("symbol").upper()
+        symbol = request.form.get("symbol")
         shares = request.form.get("shares")
         
         if not symbol:
             return apology("must provide symbol")
+        symbol = symbol.upper()
         if not shares:
             return apology("must provide number of shares")
         try:
@@ -102,6 +103,8 @@ def buy():
         db = get_db_connection()
         try:
             # Check if user has enough cash
+            if "user_id" not in session:
+                return apology("not logged in")
             user_row = db.execute("SELECT cash FROM users WHERE id = ?", (session["user_id"],)).fetchone()
             if not user_row or user_row["cash"] < cost:
                 return apology("insufficient funds")
@@ -118,6 +121,9 @@ def buy():
             db.commit()
             flash("Bought!")
             return redirect("/")
+        except Exception as e:
+            db.rollback()
+            return apology(f"Database error: {str(e)}")
         finally:
             db.close()
     
@@ -282,6 +288,8 @@ def sell():
         db = get_db_connection()
         try:
             # Check if user owns enough shares
+            if "user_id" not in session:
+                return apology("not logged in")
             user_shares = db.execute("""
                 SELECT SUM(shares) as total_shares 
                 FROM transactions 
@@ -309,6 +317,9 @@ def sell():
             db.commit()
             flash("Sold!")
             return redirect("/")
+        except Exception as e:
+            db.rollback()
+            return apology(f"Database error: {str(e)}")
         finally:
             db.close()
     
